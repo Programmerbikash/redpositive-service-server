@@ -25,8 +25,27 @@ async function run() {
         })
         app.post('/info', async (req, res) => {
             const redInfo = req.body;
-            console.log(redInfo);
+            // console.log(redInfo);
             const result = await infoCollecton.insertOne(redInfo);
+            res.send(result);
+        })
+        app.put('/info/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {
+                  plot: `updated`
+                },
+            };
+            const result = await infoCollecton.updateOne(filter, updateDoc, options);
+            res.send(result);
+        })
+        app.delete('/info/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await infoCollecton.deleteOne(query);
+            // console.log(result);
             res.send(result);
         })
     } finally {
